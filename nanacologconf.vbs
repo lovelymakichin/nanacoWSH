@@ -1,167 +1,170 @@
-'Dim anchor As HTMLAnchorElement
-' ƒtƒ@ƒCƒ‹“üo—Í‚Ì’è”
+Dim anchor 
+Dim anchorss
+' ãƒ•ã‚¡ã‚¤ãƒ«å…¥å‡ºåŠ›ã®å®šæ•°
 Const conForReading = 1, conForWriting = 2, conForAppending = 8
 
-' iniƒtƒ@ƒCƒ‹–¼
+' iniãƒ•ã‚¡ã‚¤ãƒ«å
 Const FolderName = "D:\Program\nanacoWSH\"
 Const conIniFileName = "nanaco.ini"
 Const inputFileName = "nanacoCode.txt"
 
-' Ši”[æDictionaryƒIƒuƒWƒFƒNƒg‚Ìì¬
-Set objSectionDic = CreateObject("Scripting.Dictionary")
+' æ ¼ç´å…ˆDictionaryã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+Dim objSectionDic
+Set objSectionDic = WScript.CreateObject("Scripting.Dictionary")
 
-
-
-Set fso = WScript.CreateObject("Scripting.FileSystemObject")
-' ƒtƒ@ƒCƒ‹‚ÌOPEN
-Set inputFile = fso.OpenTextFile(FolderName+inputFileName, conForReading, False)
-If Err.Number <> 0 Then
-' ƒGƒ‰[ƒƒbƒZ[ƒW‚ğo—Í
-wscript.echo "inputƒtƒ@ƒCƒ‹–¼:" & FolderName+inputFileName
-wscript.quit(1)
-End If
-
+' iniãƒ•ã‚¡ã‚¤ãƒ«ã®OPEN
+Dim inifso
 Set inifso = WScript.CreateObject("Scripting.FileSystemObject")
-' ƒtƒ@ƒCƒ‹‚ÌOPEN
-Wscript.echo "inputƒtƒ@ƒCƒ‹–¼:" & FolderName+conIniFileName
+Dim objIniFile
 Set objIniFile = inifso.OpenTextFile(FolderName+conIniFileName,conForReading,False)
 If Err.Number <> 0 Then
-' ƒGƒ‰[ƒƒbƒZ[ƒW‚ğo—Í
-Wscript.echo "inputƒtƒ@ƒCƒ‹–¼:" & FolderName+conIniFileName
-Wscript.quit(1)
+    ' ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºåŠ›
+    Wscript.echo "inputãƒ•ã‚¡ã‚¤ãƒ«å:" & FolderName+conIniFileName
+    Wscript.quit(1)
 End If
-
-' ƒtƒ@ƒCƒ‹‚ÌREAD
+' iniãƒ•ã‚¡ã‚¤ãƒ«ã®READ
 strReadLine = objIniFile.ReadLine
 Do While objIniFile.AtEndofStream = False
-' ƒXƒe[ƒgƒƒ“ƒgŠJns‚ğŒŸõ
-If (strReadLine <> " ") And (StrComp("[]", (Left(strReadLine, 1) & Right(strReadLine, 1))) = 0) Then
-' ƒZƒNƒVƒ‡ƒ“–¼‚ğæ“¾
-strSection = Mid(strReadLine, 2, (Len(strReadLine) - 2))
-' ƒL[—pDictionaryƒIƒuƒWƒFƒNƒgì¬
-Set objKeyDic = CreateObject("Scripting.Dictionary")
-' ƒtƒ@ƒCƒ‹‚ÌÅIs‚É‚È‚é‚Ü‚ÅLoop
-Do While objIniFile.AtEndofStream = False
-strReadLine = objIniFile.ReadLine
-If (strReadLine <> "") And (StrComp(";", Left(strReadLine, 1)) <> 0) Then
-' Ÿ‚ÌƒXƒe[ƒgƒƒ“ƒgŠJns‚ªoŒ»‚µ‚½‚çALoopI—¹
-If StrComp("[]", (Left(strReadLine, 1) & Right(strReadLine, 1))) = 0 Then
-Exit Do
-End If
-' ‚PƒZƒNƒVƒ‡ƒ““à‚Ì’è‹`‚ğDictionaryƒIƒuƒWƒFƒNƒg‚ÉŠi”[‚·‚é
-arrReadLine = Split(strReadLine, "=", 2, vbTextCompare)
-objKeyDic.Add UCase(arrReadLine(0)), arrReadLine(1)
-End If
-Loop
-' ƒIƒuƒWƒFƒNƒg‚ÉŠi”[‚·‚é
-objSectionDic.Add UCase(strSection), objKeyDic
-Else
-strReadLine = objIniFile.ReadLine
-End If
+' ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆé–‹å§‹è¡Œã‚’æ¤œç´¢
+    If (strReadLine <> " ") And (StrComp("[]", (Left(strReadLine, 1) & Right(strReadLine, 1))) = 0) Then
+        ' ã‚»ã‚¯ã‚·ãƒ§ãƒ³åã‚’å–å¾—
+        strSection = Mid(strReadLine, 2, (Len(strReadLine) - 2))
+        ' ã‚­ãƒ¼ç”¨Dictionaryã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
+        Set objKeyDic = WScript.CreateObject("Scripting.Dictionary")
+        ' ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ€çµ‚è¡Œã«ãªã‚‹ã¾ã§Loop
+        Do While objIniFile.AtEndofStream = False
+            strReadLine = objIniFile.ReadLine
+            If (strReadLine <> "") And (StrComp(";", Left(strReadLine, 1)) <> 0) Then
+            ' æ¬¡ã®ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆé–‹å§‹è¡ŒãŒå‡ºç¾ã—ãŸã‚‰ã€Loopçµ‚äº†
+                If StrComp("[]", (Left(strReadLine, 1) & Right(strReadLine, 1))) = 0 Then
+                    Exit Do
+                End If
+                ' ï¼‘ã‚»ã‚¯ã‚·ãƒ§ãƒ³å†…ã®å®šç¾©ã‚’Dictionaryã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ ¼ç´ã™ã‚‹
+                arrReadLine = Split(strReadLine, "=", 2, vbTextCompare)
+                objKeyDic.Add UCase(arrReadLine(0)), arrReadLine(1)
+            End If
+        Loop
+        ' ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ ¼ç´ã™ã‚‹
+            objSectionDic.Add UCase(strSection), objKeyDic
+        Else
+            strReadLine = objIniFile.ReadLine
+    End If
 Loop
  
-' ƒtƒ@ƒCƒ‹‚ÌCLOSE
+' ãƒ•ã‚¡ã‚¤ãƒ«ã®CLOSE
 objIniFile.Close
 
+' nanacoCodeãƒ•ã‚¡ã‚¤ãƒ«ã®OPEN
+Dim fso
+Set fso = WScript.CreateObject("Scripting.FileSystemObject")
+Dim objInpFile
+Set objInpFile = fso.OpenTextFile(FolderName+inputFileName, conForReading, False)
+If Err.Number <> 0 Then
+    ' ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºåŠ›
+    wscript.echo "inputãƒ•ã‚¡ã‚¤ãƒ«å:" & FolderName+inputFileName
+    wscript.quit(1)
+End If
 
 
-dim logfso
-dim logf
-dim strDate
+Dim logfso
+Dim logf
+Dim strDate
  
-set logfso = CreateObject("Scripting.FileSystemObject")
+set logfso = WScript.CreateObject("Scripting.FileSystemObject")
 strDate = Replace(FormatDateTime(Date(),0),"/","")+Replace(FormatDateTime(Time(),0),":","")
 
 set logf = fso.OpenTextFile(FolderName+"log\exec" + StrDate + ".log", 8, True)
 
-Do Until inputFile.AtEndOfStream
+Do Until objInpFile.AtEndOfStream
   Dim registerUrl
   Dim nanacoCode
-  nanacoCode = inputFile.ReadLine 
+  nanacoCode = objInpFile.ReadLine 
 
 Call use_ie(nanacoCode)
 
 Loop
 
 logf.Close
+objInpFile.Close
+
 Set logfso = Nothing 
 Set logf = Nothing
 Set logfile = Nothing
 Set strDate = Nothing
 Set nanacoCode = Nothing
-
+Set inifso = Nothing
+Set fso = Nothing
 
 Sub use_ie(nanacoCode)
 
-' ‚PD“o˜^—pURLiPCj‚ğIE‚ÅŠJ‚­
-    ' IE‹N“®
-    Set ie = CreateObject("InternetExplorer.Application")
+' ï¼‘ï¼ç™»éŒ²ç”¨URLï¼ˆPCï¼‰ã‚’IEã§é–‹ã
+    ' IEèµ·å‹•
+    Set ie = WScript.CreateObject("InternetExplorer.Application")
     registerUrl = "https://www.nanaco-net.jp/pc/emServlet?gid="+nanacoCode
     ie.Navigate registerUrl
     ie.Visible = True
     waitIE ie
 
-' ‚QDunanaco”Ô†v‚ÆuƒJ[ƒh‹LÚ‚Ì”Ô†v‚ğ©“®“ü—Í‚µAƒƒOƒCƒ“ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN
-    ' nanaco”Ô†‚ğ“ü—Í
-    ie.Document.getElementById("nanacoNumber02").Value = funcIniFileGetString(objSectionDic, "ma", "nanaco16")
-    WScript.Sleep 100
+' ï¼’ï¼ã€Œnanacoç•ªå·ã€ã¨ã€Œã‚«ãƒ¼ãƒ‰è¨˜è¼‰ã®ç•ªå·ã€ã‚’è‡ªå‹•å…¥åŠ›ã—ã€ãƒ­ã‚°ã‚¤ãƒ³ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯
+    ' nanacoç•ªå·ã‚’å…¥åŠ›
+    ie.Document.getElementById("nanacoNumber02").Value = funcIniFileGetString(objSectionDic, "ki", "nanaco16")
+    WScript.Sleep 1000
     
-    ' ƒJ[ƒh‹LÚ‚Ì”Ô†‚ğ“ü—Í
-    ie.Document.getElementById("cardNumber").Value = funcIniFileGetString(objSectionDic, "ma", "nanaco7")
-    WScript.Sleep 100
+    ' ã‚«ãƒ¼ãƒ‰è¨˜è¼‰ã®ç•ªå·ã‚’å…¥åŠ›
+    ie.Document.getElementById("cardNumber").Value = funcIniFileGetString(objSectionDic, "ki", "nanaco7")
+    WScript.Sleep 1000
     
-    ' ƒƒOƒCƒ“ƒ{ƒ^ƒ“ƒNƒŠƒbƒN
+    ' ãƒ­ã‚°ã‚¤ãƒ³ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯
     ie.Document.all("loginPass02").Click
     waitIE ie
-     WScript.Sleep 100
+    WScript.Sleep 1000
     
- ' ‚RD‰ïˆõƒƒjƒ…[‚ÌunanacoƒMƒtƒg“o˜^v‚ğƒNƒŠƒbƒN
-For Each anchor In ie.document.getElementsByTagName("A")
-If InStr(anchor.innerText, "nanacoƒMƒtƒg“o˜^") > 0 Then
-anchor.Click
-Exit For
-End If
-Next
-WScript.Sleep 1000
+ ' ï¼“ï¼ä¼šå“¡ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã€Œnanacoã‚®ãƒ•ãƒˆç™»éŒ²ã€ã‚’ã‚¯ãƒªãƒƒã‚¯
+    For Each anchor In ie.Document.getElementsByTagName("a")
+        If InStr(anchor.innerText, "nanacoã‚®ãƒ•ãƒˆç™»éŒ²") > 0 Then
+            anchor.Click
+            Exit For
+        End If
+    Next
+    WScript.Sleep 1000
      
      
-' ‚SDu‚²—˜—p–ñŠ¼‚É“¯ˆÓ‚ÌãA“o˜^v‚ğƒNƒŠƒbƒN
-For Each anchorss In ie.document.getElementsByTagName("input")
-If InStr(anchorss.outerHtml, "/member/image/gift100/btn_400.gif") > 0 Then
-anchorss.Click
-Exit For
-End If
-Next
-WScript.Sleep 1000
+' ï¼”ï¼ã€Œã”åˆ©ç”¨ç´„æ¬¾ã«åŒæ„ã®ä¸Šã€ç™»éŒ²ã€ã‚’ã‚¯ãƒªãƒƒã‚¯
+    For Each anchorss In ie.document.getElementsByTagName("input")
+        If InStr(anchorss.outerHtml, "/member/image/gift100/btn_400.gif") > 0 Then
+            anchorss.Click
+            Exit For
+        End If
+    Next
+    WScript.Sleep 1000
      
      
-' ‚TDƒMƒtƒgID“o˜^ƒtƒH[ƒ€‚ÅuŠm”F‰æ–Ê‚Övƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒNBiƒMƒtƒgID‚Í“o˜^—pURL‚ğƒNƒŠƒbƒN‚µ‚Ä‚¢‚ê‚Î©“®“ü—Íj
-    Set objShell = CreateObject("Shell.Application")
-    Set objIE2 = objShell.Windows(objShell.Windows.Count - 1) 'V‚µ‚¢ƒEƒBƒ“ƒhƒE‚ÌƒIƒuƒWƒFƒNƒg‚ğæ“¾
-    objIE2.Visible = True 'TrueFIE‚ğ•\¦ , FalseFIE‚ğ”ñ•\¦
-     WScript.Sleep 100
-For Each anchorss In objIE2.document.getElementsByTagName("input")
-If InStr(anchorss.outerHtml, "submit-button") > 0 Then
-anchorss.Click
-Exit For
-End If
-Next
-WScript.Sleep 1000
+' ï¼•ï¼ã‚®ãƒ•ãƒˆIDç™»éŒ²ãƒ•ã‚©ãƒ¼ãƒ ã§ã€Œç¢ºèªç”»é¢ã¸ã€ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã€‚ï¼ˆã‚®ãƒ•ãƒˆIDã¯ç™»éŒ²ç”¨URLã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ã„ã‚Œã°è‡ªå‹•å…¥åŠ›ï¼‰
+    Set objShell = WScript.CreateObject("Shell.Application")
+    Set objIE2 = objShell.Windows(objShell.Windows.Count - 1) 'æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+    objIE2.Visible = True 'Trueï¼šIEã‚’è¡¨ç¤º , Falseï¼šIEã‚’éè¡¨ç¤º
+    WScript.Sleep 100
+    For Each anchorss In objIE2.document.getElementsByTagName("input")
+        If InStr(anchorss.outerHtml, "submit-button") > 0 Then
+            anchorss.Click
+            Exit For
+        End If
+    Next
+    WScript.Sleep 1000
 
 
-' ‚UDÅŒã‚É“o˜^‚ğ‰Ÿ‚µ‚ÄAIE‚Ì‰æ–Ê‚ğ•Â‚¶‚é
-  ' ƒMƒtƒgID“o˜^“à—eŠm”F‰æ–Ê‚Åu“o˜^‚·‚évƒ{ƒ^ƒ“‚ğ‰Ÿ‚· 
-For Each anchorss In objIE2.document.getElementsByTagName("input")
-If InStr(anchorss.outerHtml, "“o˜^‚·‚é") > 0 Then
-anchorss.Click
-logf.WriteLine( Date() & " " & Time() & ": "+nanacoCode)
-Exit For
-End If
-Next
+' ï¼–ï¼æœ€å¾Œã«ç™»éŒ²ã‚’æŠ¼ã—ã¦ã€IEã®ç”»é¢ã‚’é–‰ã˜ã‚‹
+  ' ã‚®ãƒ•ãƒˆIDç™»éŒ²å†…å®¹ç¢ºèªç”»é¢ã§ã€Œç™»éŒ²ã™ã‚‹ã€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ 
+    For Each anchorss In objIE2.document.getElementsByTagName("input")
+        If InStr(anchorss.outerHtml, "ç™»éŒ²ã™ã‚‹") > 0 Then
+            anchorss.Click
+            logf.WriteLine( Date() & " " & Time() & ": "+nanacoCode)
+            Exit For
+        End If
+    Next
+    WScript.Sleep 1000
 
-WScript.Sleep 1000
-
-' §Œä‚ğ”jŠü
+' åˆ¶å¾¡ã‚’ç ´æ£„
     ie.Quit
     Set ie = Nothing
     
@@ -171,7 +174,7 @@ WScript.Sleep 1000
 
 End Sub
 
-' IE‚ªƒrƒW[ó‘Ô‚ÌŠÔ‘Ò‚¿‚Ü‚·
+' IEãŒãƒ“ã‚¸ãƒ¼çŠ¶æ…‹ã®é–“å¾…ã¡ã¾ã™
 Sub waitIE(ie)
     
     Do While ie.Busy = True Or ie.readystate <> 4
@@ -184,19 +187,19 @@ End Sub
 
 Function funcIniFileGetString(objDictionary, strSection, strKey)
  
-Dim objTempdic
+    Dim objTempdic
  
-strSection = UCase(strSection)
-strKey = UCase(strKey)
+    strSection = UCase(strSection)
+    strKey = UCase(strKey)
  
-If objDictionary.Exists(strSection) Then
-Set objTempdic = objDictionary.Item(strSection)
-If objTempdic.Exists(strKey) Then
-funcIniFileGetString = objDictionary(strSection)(strKey)
-Exit Function
-End If
-End If
+    If objDictionary.Exists(strSection) Then
+        Set objTempdic = objDictionary.Item(strSection)
+        If objTempdic.Exists(strKey) Then
+            funcIniFileGetString = objDictionary(strSection)(strKey)
+            Exit Function
+        End If
+    End If
  
-funcIniFileGetString = ""
+    funcIniFileGetString = ""
  
 End Function
