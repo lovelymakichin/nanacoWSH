@@ -4,9 +4,10 @@
 1000円単位にギフトコードが分かれてしまい、複数回の処理が必要となるため
 プログラムした。例）10万円=100回
  
-## vbs
+## 簡単な説明
  
-nanacoCode.txt
+nanacoCode.txtを作成し、ギフトコードを張り付ける。1行1コード
+'cscript nanacologconf.vbs'を実行
 
  
 ## 機能
@@ -18,9 +19,10 @@ nanacoCode.txt
 - Windows
 - vbs実行を許可
 - カレントディレクトリにlogフォルダを作成
+- 文字コードANSI
  
 ## 使い方
  
 1. nanacologconf.vbsをカレントディレクトリにコピー
-2. nanacoCode.txtをカレントディレクトリにコピー
-3. ダブルクリック。
+2. nanacoCode.txtにギフトコードを張り付け、カレントディレクトリにコピー
+3. 'cscript nanacologconf.vbs'を実行
